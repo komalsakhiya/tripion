@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
             console.log('res===========of fb=======>',user)
             //now we have the users info, let's save it in the NativeStorage
           }, error => {
-            console.log(error);
+            console.log('error============>',error);
           });
       })
   }
