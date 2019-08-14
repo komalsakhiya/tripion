@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
@@ -41,4 +41,33 @@
         <ion-label>Theme Your App</ion-label>
       </ion-item>
     </ion-list>
-</ion-content>
+</ion-content> -->
+
+<!-- 
+ <ion-split-pane>
+    <ion-menu type="overlay">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Menu</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list>
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
+            <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
+              <ion-icon slot="start" [name]="p.icon"></ion-icon>
+              <ion-label>
+                {{p.title}}
+              </ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet main></ion-router-outlet>
+  </ion-split-pane> -->
+  <ion-content>
+    <div>
+      <ion-label>komal</ion-label>
+    </div>
+  </ion-content>

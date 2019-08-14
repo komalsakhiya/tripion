@@ -13,6 +13,8 @@ import {RegisterComponent} from './register/register.component';
 import {LoginComponent} from './login/login.component';
 import {MyInterceptor} from './interceptor';
 import { Facebook } from '@ionic-native/facebook/ngx';
+import {GooglePlus} from '@ionic-native/google-plus/ngx';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -27,12 +29,14 @@ import { Facebook } from '@ionic-native/facebook/ngx';
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    IonicStorageModule.forRoot()
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Facebook,
+    GooglePlus,
     { provide:RouteReuseStrategy , useClass: IonicRouteStrategy },
     { provide:HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
    

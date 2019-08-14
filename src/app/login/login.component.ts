@@ -3,7 +3,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../services/toast.service';
-import { Facebook,FacebookLoginResponse } from '@ionic-native/facebook/ngx';
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
+import { GooglePlus } from '@ionic-native/google-plus/ngx';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -12,7 +14,7 @@ import { Facebook,FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isDisable = false
-  constructor(public _userService: UserService, public _toastService: ToastService, private fb: Facebook, ) {
+  constructor(public router:Router,public _userService: UserService, public _toastService: ToastService, private fb: Facebook, private googlePlus: GooglePlus) {
     this.loginForm = new FormGroup({
       emailId: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
@@ -20,6 +22,11 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() { }
+
+  /**
+   * Login User
+   * @param {Object}  data 
+   */
   loginUser(data) {
     console.log('data============>', data);
     if (this.loginForm.invalid) {
@@ -30,6 +37,7 @@ export class LoginComponent implements OnInit {
       console.log('res of login============>', res);
       this._toastService.presentToast(res.message);
       this.isDisable = false;
+      this.router.navigateByUrl('/home');
     }, err => {
       console.log('err in login ============>', err);
       this._toastService.presentToast(err.error.message);
@@ -43,19 +51,32 @@ export class LoginComponent implements OnInit {
     //the permissions your facebook app needs from the user
     permissions = ["public_profile", "email"];
     this.fb.login(permissions)
-      .then((response:FacebookLoginResponse )=> {
-        console.log('response=============>',response)
-        let userId = response.authResponse.userID;
-        //Getting name and gender properties
-        this.fb.api("/me?fields=name,email", permissions)
-          .then(user => {
-            user.picture = "https://graph.facebook.com/" + userId + "/picture?type=large";
-            console.log('res===========of fb=======>',user)
-            //now we have the users info, let's save it in the NativeStorage
-          }, error => {
-            console.log('error============>',error);
-          });
+      .then((response: FacebookLoginResponse) => {
+        console.log('response=============>', response)
+        let accessToken = response.authResponse.accessToken;
+        console.log('accessToken=============,accessToken', accessToken)
+        this._userService.fbLogin(accessToken).subscribe((res: any) => {
+          console.log('response of server for fb login=============>', res)
+          this._toastService.presentToast(res.message);
+        }, err => {
+          console.log('err===========>', err)
+        })
       })
+  }
+
+  doGoogleLogin() {
+    console.log("in google login============")
+    this.googlePlus.login({})
+      .then((res) => {
+        console.log('res==of google==============>', res);
+        this._userService.googleLogin(res.accessToken).subscribe((res: any) => {
+          console.log('response of google login============>', res);
+          this._toastService.presentToast(res.message);
+        }, err => {
+          console.log('err==========>', err)
+        })
+      })
+      .catch(err => console.error('err==============>', err));
   }
 
 }

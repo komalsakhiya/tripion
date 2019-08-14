@@ -11,10 +11,12 @@ import {
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { Router } from '@angular/router';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable()
 export class MyInterceptor implements HttpInterceptor {
     accessToken;
+    key = "tripion@raoinfor";
     constructor(public route: Router,public _toastService:ToastService) {
         this.accessToken = localStorage.getItem('curruntUserToken')
     }
@@ -52,7 +54,6 @@ export class MyInterceptor implements HttpInterceptor {
         } else {
             return next.handle(request).pipe(
                 map((event: HttpResponse<any>) => {
-
                     console.log("in response===========>", event);
                     return event;
                 }),
@@ -61,7 +62,7 @@ export class MyInterceptor implements HttpInterceptor {
                     const errorMessage = error.error;
                     console.log("error in interceptor", errorMessage);
                     if (error.status === 401) {
-                        localStorage.removeItem('curruntUserToken');
+                        // localStorage.removeItem('curruntUserToken');
                         this._toastService.presentToast(errorMessage);
                         //   Swal.fire({
                         //     type: 'error',
