@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from  './login/login.component';
+import { LoginComponent } from './login/login.component';
+import { ForgotPswComponent } from './forgot-psw/forgot-psw.component';
+import { AuthGuard, LoginGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -11,6 +13,7 @@ const routes: Routes = [
   },
   {
     path: 'home',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
   {
@@ -18,13 +21,21 @@ const routes: Routes = [
     loadChildren: () => import('./list/list.module').then(m => m.ListPageModule)
   },
   {
-    path:'signup',
-    component:RegisterComponent
+    path: 'signup',
+    component: RegisterComponent
   },
   {
-    path:'login',
-    component:LoginComponent
-  }
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [LoginGuard]
+  },
+  {
+    path:'forgot-password/:token',
+    component:ForgotPswComponent
+  },
+  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
+  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
+  // { path: 'menu', canActivate: [AuthGuard], loadChildren: './menu/menu.module#MenuPageModule' }
 ];
 
 @NgModule({
@@ -33,4 +44,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

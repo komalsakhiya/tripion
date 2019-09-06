@@ -6,7 +6,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-
+  <!-- REgister user form -->
   <form [formGroup]="registerForm">
     <ion-grid>
       <ion-row color="primary" justify-content-center>
@@ -16,15 +16,17 @@
               <ion-input formControlName="name" type="text" placeholder="Enter your userName" required></ion-input>
             </ion-item>
             <ion-item>
-              <ion-input formControlName="contact" type="number" 
-                placeholder="Enter Your Contact number" ngModel required >
+              <ion-input formControlName="contact" type="number" placeholder="Enter Your Contact number" ngModel
+                required>
               </ion-input>
             </ion-item>
             <ion-item>
               <ion-input formControlName="emailId" type="email" placeholder="Enter your email" required></ion-input>
             </ion-item>
             <ion-item>
-              <ion-input formControlName="password" type="password" placeholder="Password" ngModel required></ion-input>
+              <ion-input formControlName="password" [type]="passwordType" placeholder="Password" ngModel required>
+              </ion-input>
+              <ion-icon [name]="passwordIcon" class="passwordIcon" (click)='hideShowPassword()'></ion-icon>
             </ion-item>
           </div>
           <div>

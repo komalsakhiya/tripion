@@ -18,7 +18,7 @@ export class MyInterceptor implements HttpInterceptor {
     accessToken;
     key = "tripion@raoinfor";
     constructor(public route: Router,public _toastService:ToastService) {
-        this.accessToken = localStorage.getItem('curruntUserToken')
+        this.accessToken = localStorage.getItem('accessToken')
     }
     //function which will be called for all http calls
     intercept(

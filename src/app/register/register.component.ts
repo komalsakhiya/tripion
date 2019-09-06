@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from '../services/user.service';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { from } from 'rxjs';
-import {ToastService} from '../services/toast.service';
+import { ToastService } from '../services/toast.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -12,7 +12,10 @@ import {ToastService} from '../services/toast.service';
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   isDisable = false;
-  constructor(public router:Router,public _userService:UserService,public _toastServices:ToastService) {
+  passwordType: string = 'password';
+  passwordIcon: string = 'ios-eye-off';
+
+  constructor(public router: Router, public _userService: UserService, public _toastServices: ToastService) {
     this.registerForm = new FormGroup({
       name: new FormControl('', Validators.required),
       contact: new FormControl('', [Validators.required]),
@@ -36,20 +39,28 @@ export class RegisterComponent implements OnInit {
   //   }
   // }
 
+  hideShowPassword() {
+    this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
+    this.passwordIcon = this.passwordIcon === 'ios-eye-off' ? 'ios-eye' : 'ios-eye-off';
+  }
 
+  /**
+   * Register new usre
+   * @param {Object}data 
+   */
   rgisterUser(data) {
     console.log('register data==========', data.value);
     if (this.registerForm.invalid) {
       return;
     }
     this.isDisable = true
-    this._userService.registerUser(data.value).subscribe((res:any)=>{
-      console.log("register user data response==================?",res);
+    this._userService.registerUser(data.value).subscribe((res: any) => {
+      console.log("register user data response==================?", res);
       this._toastServices.presentToast(res.message);
       this.router.navigateByUrl('/login');
       this.isDisable = false;
-    },err=>{
-      console.log("err in register data===============>",err);
+    }, err => {
+      console.log("err in register data===============>", err);
       this._toastServices.presentToast(err.error.message);
       this.isDisable = false;
     })
